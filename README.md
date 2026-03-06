@@ -1,16 +1,5 @@
 <img src="https://images.squarespace-cdn.com/content/60ae609175dadf36a99da53d/ca3f3629-7752-4799-ba8c-406a3e4340b0/GitHubBanner.png?content-type=image%2Fpng">
 
-<!---
-<p align="center"> 
-<picture>
- <source media="(prefers-color-scheme: dark)" srcset="https://images.squarespace-cdn.com/content/60ae609175dadf36a99da53d/918bb006-0dd4-49f6-8bfa-606f08ddb2e9/Transparent+layer+on+top+%286%29.png?content-type=image%2Fpng" width=500>
- 
- <img alt="Shows varying Adam logo in light and dark mode" src="https://images.squarespace-cdn.com/content/60ae609175dadf36a99da53d/918bb006-0dd4-49f6-8bfa-606f08ddb2e9/Transparent+layer+on+top+%286%29.png?content-type=image%2Fpng" width=500> 
-
- 
-</picture>
-</p>
--->
 <div align="center">
 <a href="https://adammizner.com/screenslurps">PODCAST HOST</a> | <a href="https://amizner.itch.io/">GAME DESIGNER</a> | <a href="https://www.adammizner.com/blog">BLOG</a> 
 </div>
@@ -41,7 +30,7 @@ From my beginnings in Rockford, IL and through my experience obtaining my Master
 - &nbsp; [LinkedIn](https://www.linkedin.com/in/adammizner)
 - &nbsp; [SoundCloud](https://soundcloud.com/adammizner)
 - &nbsp; [Instagram](https://www.instagram.com/adammizner)
-- &nbsp; [X](https://www.x.com/adammizner)
+- &nbsp; [Bluesky Social](https://bsky.app/profile/adammizner.com)
 
 <!---
 amizner/amizner is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
