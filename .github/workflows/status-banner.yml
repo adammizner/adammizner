@@ -20,8 +20,9 @@ jobs:
           RESPONSE=$(curl -s -X POST https://api.github.com/graphql \
             -H "Authorization: bearer $GH_TOKEN" \
             -H "Content-Type: application/json" \
-            -d '{"query":"query { user(login: \"adammizner\") { status { message emoji indicatesLimitedAvailability } } }'}')
+            -d "{\"query\":\"query { user(login: \\\"adammizner\\\") { status { message emoji indicatesLimitedAvailability } } }\"}")
 
+          echo "API RESPONSE:"
           echo "$RESPONSE"
 
           MESSAGE=$(echo "$RESPONSE" | jq -r '.data.user.status.message // empty')
@@ -54,7 +55,7 @@ jobs:
           git add status-banner.png
 
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No changes"
             exit 0
           fi
 
