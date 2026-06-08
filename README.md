@@ -1,6 +1,6 @@
 <img src="https://images.squarespace-cdn.com/content/60ae609175dadf36a99da53d/ca3f3629-7752-4799-ba8c-406a3e4340b0/GitHubBanner.png?content-type=image%2Fpng">
 
-<img src="https://raw.githubusercontent.com/amizner/amizner/main/status-banner.png">
+<img src="https://raw.githubusercontent.com/adammizner/adammizner/main/status-banner.png">
 
 <div align="center">
 <a href="https://adammizner.com/screenslurps">PODCAST HOST</a> | <a href="https://amizner.itch.io/">GAME DESIGNER</a> | <a href="https://www.adammizner.com/blog">BLOG</a> 
