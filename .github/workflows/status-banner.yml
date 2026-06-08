@@ -13,43 +13,28 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Fetch GitHub status (GraphQL)
-        id: status
+      - name: Fetch GitHub status
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           RESPONSE=$(curl -s -X POST https://api.github.com/graphql \
             -H "Authorization: bearer $GH_TOKEN" \
             -H "Content-Type: application/json" \
-            -d '{
-              "query": "query { user(login: \"adammizner\") { status { message emoji indicatesLimitedAvailability expiresAt } } }"
-            }')
+            -d '{"query":"query { user(login: \"adammizner\") { status { message emoji indicatesLimitedAvailability } } }"}')
 
-          echo "FULL RESPONSE:"
           echo "$RESPONSE"
 
-          MESSAGE=$(echo "$RESPONSE" | jq -r '.data.user.status.message')
-          EMOJI=$(echo "$RESPONSE" | jq -r '.data.user.status.emoji')
-          LIMITED=$(echo "$RESPONSE" | jq -r '.data.user.status.indicatesLimitedAvailability')
+          MESSAGE=$(echo "$RESPONSE" | jq -r '.data.user.status.message // empty')
+          EMOJI=$(echo "$RESPONSE" | jq -r '.data.user.status.emoji // empty')
+          LIMITED=$(echo "$RESPONSE" | jq -r '.data.user.status.indicatesLimitedAvailability // false')
 
-          echo "MESSAGE=$MESSAGE"
-          echo "EMOJI=$EMOJI"
-          echo "LIMITED=$LIMITED"
-
-          # Normalize nulls
-          if [ "$MESSAGE" = "null" ]; then MESSAGE=""; fi
-          if [ "$EMOJI" = "null" ]; then EMOJI=""; fi
-
-          # Decide state
           if [ -z "$MESSAGE" ] && [ -z "$EMOJI" ] && [ "$LIMITED" != "true" ]; then
             echo "STATE=available" >> $GITHUB_ENV
-            echo "Detected: AVAILABLE"
           else
             echo "STATE=busy" >> $GITHUB_ENV
-            echo "Detected: BUSY"
           fi
 
-      - name: Swap banner image
+      - name: Swap banner
         run: |
           if [ "$STATE" = "available" ]; then
             cp available.png status-banner.png
@@ -57,22 +42,17 @@ jobs:
             cp busy.png status-banner.png
           fi
 
-      - name: Check for changes
-        run: |
-          if git diff --quiet status-banner.png; then
-            echo "No change in banner"
-            echo "changed=false" >> $GITHUB_ENV
-          else
-            echo "Banner changed"
-            echo "changed=true" >> $GITHUB_ENV
-          fi
-
-      - name: Commit and push (only if changed)
-        if: env.changed == 'true'
+      - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
           git add status-banner.png
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+
           git commit -m "Update status banner"
           git push
