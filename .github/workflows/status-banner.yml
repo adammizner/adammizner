@@ -1,14 +1,62 @@
-name: Status Banner Update
+name: Update Status Banner
 
 on:
+  schedule:
+    - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:
-  update:
+  update-status:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Debug trigger
-        run: echo "Workflow is running correctly"
+      - name: Fetch GitHub status
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          RESPONSE=$(curl -s -X POST https://api.github.com/graphql \
+            -H "Authorization: bearer $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"query":"query { user(login: \"adammizner\") { status { message emoji indicatesLimitedAvailability } } }'}')
+
+          echo "$RESPONSE"
+
+          MESSAGE=$(echo "$RESPONSE" | jq -r '.data.user.status.message // empty')
+          EMOJI=$(echo "$RESPONSE" | jq -r '.data.user.status.emoji // empty')
+          LIMITED=$(echo "$RESPONSE" | jq -r '.data.user.status.indicatesLimitedAvailability // false')
+
+          echo "MESSAGE=$MESSAGE"
+          echo "EMOJI=$EMOJI"
+          echo "LIMITED=$LIMITED"
+
+          if [ -z "$MESSAGE" ] && [ -z "$EMOJI" ] && [ "$LIMITED" != "true" ]; then
+            echo "STATE=available" >> $GITHUB_ENV
+          else
+            echo "STATE=busy" >> $GITHUB_ENV
+          fi
+
+      - name: Swap banner image
+        run: |
+          if [ "$STATE" = "available" ]; then
+            cp available.png status-banner.png
+          else
+            cp busy.png status-banner.png
+          fi
+
+      - name: Commit changes (only if needed)
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add status-banner.png
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update status banner"
+          git push
