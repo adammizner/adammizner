@@ -1,10 +1,14 @@
-name: Test Workflow
+name: Status Banner Update
 
 on:
   workflow_dispatch:
 
 jobs:
-  test:
+  update:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "Workflow is working"
+      - uses: actions/checkout@v4
+
+      - name: Debug trigger
+        run: echo "Workflow is running correctly"
