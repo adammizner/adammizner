@@ -25,19 +25,18 @@ jobs:
           echo "API RESPONSE:"
           echo "$RESPONSE"
 
-          MESSAGE=$(echo "$RESPONSE" | jq -r '.data.user.status.message // empty')
           EMOJI=$(echo "$RESPONSE" | jq -r '.data.user.status.emoji // empty')
-          LIMITED=$(echo "$RESPONSE" | jq -r '.data.user.status.indicatesLimitedAvailability // false')
 
-          echo "MESSAGE=$MESSAGE"
           echo "EMOJI=$EMOJI"
-          echo "LIMITED=$LIMITED"
 
-          if [ -z "$MESSAGE" ] && [ -z "$EMOJI" ] && [ "$LIMITED" != "true" ]; then
-            echo "STATE=available" >> $GITHUB_ENV
+          if [ -z "$EMOJI" ]; then
+            STATE=available
           else
-            echo "STATE=busy" >> $GITHUB_ENV
+            STATE=busy
           fi
+
+          echo "STATE=$STATE"
+          echo "STATE=$STATE" >> $GITHUB_ENV
 
       - name: Swap banner image
         run: |
