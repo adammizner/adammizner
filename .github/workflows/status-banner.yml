@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Fetch GitHub status
         env:
@@ -37,7 +39,7 @@ jobs:
           echo "MESSAGE=$MESSAGE"
           echo "EMOJI=$EMOJI"
 
-          # --- normalize values (VERY important for GitHub API output) ---
+          # Normalize
           EMOJI=$(echo "$EMOJI" | tr -d '\r\n' | xargs)
           MESSAGE=$(echo "$MESSAGE" | tr -d '\r\n' | xargs)
 
@@ -63,3 +65,21 @@ jobs:
           else
             cp busy.png status-banner.png
           fi
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add status-banner.png
+
+          echo "---- GIT STATUS ----"
+          git status
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update status banner"
+          git push
