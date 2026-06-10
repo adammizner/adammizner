@@ -36,7 +36,7 @@ jobs:
 
             echo "MESSAGE=$MESSAGE"
             echo "EMOJI=$EMOJI"
-            
+
             if [ -z "$EMOJI" ] && [ -z "$MESSAGE" ]; then
             cp available.png status-banner.png
 
@@ -46,7 +46,7 @@ jobs:
              elif [ "$EMOJI" = ":headphones:" ] || [[ "$MESSAGE" == *"Mixing"* ]]; then
             cp mixing.png status-banner.png
 
-              elif [ "$EMOJI" = ":video_game:" ] || [[ "$MESSAGE" == *"Design"* ]]; then
+              elif [ "$EMOJI" = ":video_game:" ] || [[ "$MESSAGE" == *"Designing"* ]]; then
             cp gamedev.png status-banner.png
 
               elif [ "$EMOJI" = ":airplane:" ] || [[ "$MESSAGE" == *"Away"* ]]; then
