@@ -36,16 +36,16 @@ jobs:
           if [ -z "$EMOJI" ] && [ -z "$MESSAGE" ]; then
             cp available.png status-banner.png
 
-          elif [ "$EMOJI" = "🎙️" ] || [[ "$MESSAGE" == *"Recording"* ]]; then
+          elif [ "$EMOJI" = ":studio_microphone:" ] || [[ "$MESSAGE" == *"Recording"* ]]; then
             cp recording.png status-banner.png
 
-          elif [ "$EMOJI" = "🎧" ] || [[ "$MESSAGE" == *"Mixing"* ]]; then
+          elif [ "$EMOJI" = ":headphones:" ] || [[ "$MESSAGE" == *"Mixing"* ]]; then
             cp mixing.png status-banner.png
 
-          elif [ "$EMOJI" = "🎮" ] || [[ "$MESSAGE" == *"Design"* ]]; then
+          elif [ "$EMOJI" = ":video_game:" ] || [[ "$MESSAGE" == *"Design"* ]]; then
             cp gamedev.png status-banner.png
 
-          elif [ "$EMOJI" = "✈️" ] || [[ "$MESSAGE" == *"Away"* ]]; then
+          elif [ "$EMOJI" = ":airplane:" ] || [[ "$MESSAGE" == *"Away"* ]]; then
             cp away.png status-banner.png
 
           else
