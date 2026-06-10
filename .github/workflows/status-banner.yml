@@ -20,43 +20,34 @@ jobs:
           RESPONSE=$(curl -s -X POST https://api.github.com/graphql \
             -H "Authorization: bearer $GH_TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{\"query\":\"query { user(login: \\\"adammizner\\\") { status { message emoji indicatesLimitedAvailability } } }\"}")
+            -d '{"query":"query { user(login: \"adammizner\") { status { message emoji indicatesLimitedAvailability } } }"}')
 
-          echo "API RESPONSE:"
           echo "$RESPONSE"
 
+          MESSAGE=$(echo "$RESPONSE" | jq -r '.data.user.status.message // empty')
           EMOJI=$(echo "$RESPONSE" | jq -r '.data.user.status.emoji // empty')
+          LIMITED=$(echo "$RESPONSE" | jq -r '.data.user.status.indicatesLimitedAvailability // false')
 
-          echo "EMOJI=$EMOJI"
+          echo "MESSAGE=$MESSAGE" >> $GITHUB_ENV
+          echo "EMOJI=$EMOJI" >> $GITHUB_ENV
 
-          if [ -z "$EMOJI" ]; then
-            STATE=available
-          else
-            STATE=busy
-          fi
-
-          echo "STATE=$STATE"
-          echo "STATE=$STATE" >> $GITHUB_ENV
-
-      - name: Swap banner image
+      - name: Swap banner
         run: |
-          if [ "$STATE" = "available" ]; then
+          if [ -z "$EMOJI" ] && [ -z "$MESSAGE" ]; then
             cp available.png status-banner.png
+
+          elif [ "$EMOJI" = "🎙️" ] || [[ "$MESSAGE" == *"Recording"* ]]; then
+            cp recording.png status-banner.png
+
+          elif [ "$EMOJI" = "🎧" ] || [[ "$MESSAGE" == *"Mixing"* ]]; then
+            cp mixing.png status-banner.png
+
+          elif [ "$EMOJI" = "🎮" ] || [[ "$MESSAGE" == *"Design"* ]]; then
+            cp gamedev.png status-banner.png
+
+          elif [ "$EMOJI" = "✈️" ] || [[ "$MESSAGE" == *"Away"* ]]; then
+            cp away.png status-banner.png
+
           else
             cp busy.png status-banner.png
           fi
-
-      - name: Commit changes (only if needed)
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git add status-banner.png
-
-          if git diff --cached --quiet; then
-            echo "No changes"
-            exit 0
-          fi
-
-          git commit -m "Update status banner"
-          git push
