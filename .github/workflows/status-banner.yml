@@ -41,16 +41,17 @@ jobs:
             cp available.png status-banner.png
 
              elif [ "$EMOJI" = ":studio_microphone:" ] || [[ "$MESSAGE" == *"Recording"* ]]; then
-            cp recording.png status-banner.png
+              cp recording.png status-banner.png
 
              elif [ "$EMOJI" = ":headphones:" ] || [[ "$MESSAGE" == *"Mixing"* ]]; then
-            cp mixing.png status-banner.png
+              cp mixing.png status-banner.png
 
               elif [ "$EMOJI" = ":video_game:" ] || [[ "$MESSAGE" == *"Designing"* ]]; then
-            cp gamedev.png status-banner.png
+               echo "GAMEDEV MATCHED"
+               cp gamedev.png status-banner.png
 
               elif [ "$EMOJI" = ":airplane:" ] || [[ "$MESSAGE" == *"Away"* ]]; then
-            cp away.png status-banner.png
+              cp away.png status-banner.png
 
               else
             cp busy.png status-banner.png
