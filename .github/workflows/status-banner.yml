@@ -34,25 +34,32 @@ jobs:
       - name: Swap banner
         run: |
 
-            echo "MESSAGE=$MESSAGE"
-            echo "EMOJI=$EMOJI"
+          echo "MESSAGE=$MESSAGE"
+          echo "EMOJI=$EMOJI"
 
-            if [ -z "$EMOJI" ] && [ -z "$MESSAGE" ]; then
+          # --- normalize values (VERY important for GitHub API output) ---
+          EMOJI=$(echo "$EMOJI" | tr -d '\r\n' | xargs)
+          MESSAGE=$(echo "$MESSAGE" | tr -d '\r\n' | xargs)
+
+          echo "NORMALIZED EMOJI=[$EMOJI]"
+          echo "NORMALIZED MESSAGE=[$MESSAGE]"
+
+          if [ -z "$EMOJI" ] && [ -z "$MESSAGE" ]; then
             cp available.png status-banner.png
 
-             elif [ "$EMOJI" = ":studio_microphone:" ] || [[ "$MESSAGE" == *"Recording"* ]]; then
-              cp recording.png status-banner.png
+          elif [[ "$EMOJI" == *studio_microphone* ]] || [[ "$MESSAGE" == *Recording* ]]; then
+            cp recording.png status-banner.png
 
-             elif [ "$EMOJI" = ":headphones:" ] || [[ "$MESSAGE" == *"Mixing"* ]]; then
-              cp mixing.png status-banner.png
+          elif [[ "$EMOJI" == *headphones* ]] || [[ "$MESSAGE" == *Mixing* ]]; then
+            cp mixing.png status-banner.png
 
-              elif [ "$EMOJI" = ":video_game:" ] || [[ "$MESSAGE" == *"Designing"* ]]; then
-               echo "GAMEDEV MATCHED"
-               cp gamedev.png status-banner.png
+          elif [[ "$EMOJI" == *video_game* ]] || [[ "$MESSAGE" == *Designing* ]]; then
+            echo "GAMEDEV MATCHED"
+            cp gamedev.png status-banner.png
 
-              elif [ "$EMOJI" = ":airplane:" ] || [[ "$MESSAGE" == *"Away"* ]]; then
-              cp away.png status-banner.png
+          elif [[ "$EMOJI" == *airplane* ]] || [[ "$MESSAGE" == *Away* ]]; then
+            cp away.png status-banner.png
 
-              else
+          else
             cp busy.png status-banner.png
-            fi
+          fi
