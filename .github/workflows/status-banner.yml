@@ -59,7 +59,7 @@ jobs:
             echo "GAMEDEV MATCHED"
             cp gamedev.png status-banner.png
 
-          elif [[ "$EMOJI" == *airplane* ]] || [[ "$MESSAGE" == *Away* ]]; then
+          elif [[ "$EMOJI" == *airplane* ]] || [[ "$MESSAGE" == *Away* ]] || [[ "$MESSAGE" == *Traveling* ]]; then
             cp away.png status-banner.png
 
           else
